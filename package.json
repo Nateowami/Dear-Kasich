@@ -1,0 +1,25 @@
+{
+  "name": "Dear-Kasich",
+  "version": "1.0.0",
+  "description": "An open letter to Governor Kasich",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nateowami/Dear-Kasich"
+  },
+  "author": "Nathaniel Paulus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nateowami/Dear-Kasich/issues"
+  },
+  "homepage": "https://github.com/Nateowami/Dear-Kasich",
+  "dependencies": {
+    "consolidate": "^0.14.0",
+    "express": "^4.13.4",
+    "handlebars": "^4.0.5",
+    "monk": "^1.0.1"
+  }
+}

@@ -86,30 +86,33 @@ button, select {
 }
 
 #names {
-    margin-bottom: 5pt;
-    padding-bottom: 5pt;
-    max-height: 250pt;
-    overflow: hidden;
-    position: relative;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#names ul {
+  padding: 10pt;
 }
 
 #show_more {
   font-size: 14pt;
   text-align: center;
-  display: inline-block;
+  /* JS will change it to inline-block if it needs to be shown */
+  display: none;
   vertical-align: bottom;
   width: 100%;
   height: 100%;
   position: absolute;
-  padding: 0 5pt 0;
   left: 0;
   top: 0;
-  background: linear-gradient(transparent 200pt, rgba(256,256,256,0.75) 225pt, white 250pt);
+  /*rgba(256,256,256,0.75) 225pt,*/
+  background: linear-gradient(transparent 300px, rgba(256,256,256,0.75) 350px, white 400px);
 }
 
 #show_more a {
   display: block;
-  margin-top: 225pt;
+  margin-top: 350px;
   font-weight: bold;
 }
 
@@ -183,11 +186,11 @@ ul.icon li {
 
 @font-face {
   font-family: 'icons';
-  src: url('./font/icons.eot?3771457');
-  src: url('./font/icons.eot?3771457#iefix') format('embedded-opentype'),
-       url('./font/icons.woff?3771457') format('woff'),
-       url('./font/icons.ttf?3771457') format('truetype'),
-       url('./font/icons.svg?3771457#fontello') format('svg');
+  src: url('/static/font/icons.eot?3771457');
+  src: url('/static/font/icons.eot?3771457#iefix') format('embedded-opentype'),
+       url('/static/font/icons.woff?3771457') format('woff'),
+       url('/static/font/icons.ttf?3771457') format('truetype'),
+       url('/static/font/icons.svg?3771457#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
