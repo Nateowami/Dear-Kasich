@@ -81,8 +81,37 @@ article, form, #share, #contact {
   margin: 10pt;
 }
 
-button, select {
+button, select, input {
   font-size: 12pt;
+}
+
+#flash_message {
+  display: none;
+  text-align: center;
+}
+
+.error {
+-webkit-box-shadow: 0px 0px 5px #d45252;
+-moz-box-shadow:    0px 0px 4px rgba(255, 0, 0, 0.75);
+box-shadow:         0px 0px 4px 1px rgba(255, 0, 0, 0.75);
+  border: 1px solid #b03535;
+}
+
+/* CSS animation from http://stackoverflow.com/q/12814612 */
+
+@-webkit-keyframes yellow-fade {   
+   0% {background: yellow;}
+   100% {background: none;}
+}
+
+@keyframes yellow-fade {
+   0% {background: yellow;}
+   100% {background: none;}
+}
+
+.fade {
+   -webkit-animation: yellow-fade 2s ease-in 1;
+   animation: yellow-fade 2s ease-in 1;
 }
 
 #names {

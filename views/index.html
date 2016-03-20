@@ -36,41 +36,21 @@
     
     <h2>Signers</h2>
     <article id="names">
-      <ul>
+      <ul id="name_list">
       {{#each signatures}}
         <li><span class="name">{{name}}</span><span class="state">{{state}}</span></li>
       {{/each}}
       </ul>
       <div id="show_more"><a href="javascript:void(expandNames());">Show more</a></div>
-      
-      <script type="text/javascript">
-        //script for managing the show more button
-        document.addEventListener('DOMContentLoaded', function(){
-          var names = document.getElementById("names");
-          if(names.clientHeight > 400) {
-            console.log(names.clientHeight);
-            document.getElementById("show_more").style.display = "inline-block";
-            //limit the height so there will be something to cut off
-            names.style.height = "400px";
-          }
-        });
-        
-        function expandNames(){
-          document.getElementById('names').style.maxHeight = 'none';
-          document.getElementById('names').style.height = 'auto';
-          document.getElementById('show_more').style.display = 'none';
-        }
-      </script>
-      
     </article>
     
     <h2>Sign the open letter</h2>
-    <form id="sign" action="/sign_letter" method="POST">
+    <form id="sign" onsubmit="return postForm()" method="POST">
       <div class="field">
       <label>Name (first & last) <input id="name" name="name" type="text"></label>
       </div>
       <div class="field">
-      <label>State or territory <select>
+      <label>State or territory <select name="state">
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
             <option value="AZ">Arizona</option>
@@ -131,7 +111,7 @@
         </label>
       </div>
       <div class="field">
-        <label><input type="checkbox" id="public" name="public" checked>Show my name publically</label>
+        <label><input type="checkbox" id="publicly" name="publicly" checked>Show my name publically</label>
       </div>
       <div class="field">
         <label>Email address for updates (optional) <input type="text" id="email" name="email"></label>
@@ -139,6 +119,7 @@
       <div class="field">
         <button type="submit">Sign the letter!</button>
       </div>
+      <div id="flash_message"></div>
     </form>
     
     <h2>Pass it on</h2>
@@ -176,5 +157,98 @@
       </p>
     </div>
     
+    <script type="text/javascript">
+      //alias
+      var e = document.getElementById.bind(document);
+      
+      //script for managing the show more button
+      document.addEventListener('DOMContentLoaded', function(){
+        var names = e("names");
+        if(names.clientHeight > 400) {
+          e("show_more").style.display = "inline-block";
+          //limit the height so there will be something to cut off
+          names.style.height = "400px";
+        }
+      });
+      
+      function expandNames(){
+        e('names').style.maxHeight = 'none';
+        e('names').style.height = 'auto';
+        e('show_more').style.display = 'none';
+      }
+      
+      function postForm(){
+        var f = e('sign');
+        var data = {
+          name: f.name.value,
+          state: f.state.value,
+          publicly: f.publicly.checked,
+          email: f.email.value
+        }
+        
+        //validate name
+        if(!data.name){
+          var name = e('name')
+          name.className = 'error';
+          formFlash("Please enter a name.");
+          name.focus();
+          return false;
+        }
+        else {
+          var name = e('name');
+          //remove any error class
+          name.className = '';
+          //reset values
+          name.value = '';
+          e('email').value = '';
+        }
+        
+        //submit with AJAX - courtesy of http://youmightnotneedjquery.com/ Copyright (c) 2014 HubSpot, Inc. - MIT license
+        var req = new XMLHttpRequest();
+        req.open('POST', '/sign', true);
+        req.setRequestHeader('Content-Type', 'application/json');
+        
+        req.onload = function() {
+          if (req.status >= 200 && req.status < 400) {
+            handleResponse(req.responseText);
+          } else {
+            // We reached our target server, but it returned an error
+            formFlash('A ' + req.status + ' server error occured.');
+          }
+        };
+        
+        req.onerror = function() {
+          formFlash("There was an error submitting the form.");
+        };
+
+        req.send(JSON.stringify(data));
+        
+        //don't submit the normal way
+        return false;
+      }
+      
+      function handleResponse(data){
+        data = JSON.parse(data);
+        formFlash('Thank you! Your name has been successfully added' + (data.publicly ? '' : ' but will remain private') + '. Now share with your friends!');
+        if(data.publicly){
+          e('name_list').innerHTML += '<li class="fade"><span class="name">' + data.name + '</span><span class="state">' + data.state + '</span></li>';
+          
+          //remove the fade class after 2 seconds
+          //get the last element
+          var li = e('name_list').lastChild;
+          setTimeout(function(){
+              li.className = '';
+            }, 2000);
+        }
+      }
+      
+      //flash message under form
+      function formFlash(msg){
+        var flash  = e('flash_message'); 
+        flash.innerHTML = '<span class="fade">' + msg + '</span>';
+        flash.style.display = "block"; //unhide if it was hidden
+      }
+    </script>
+   
   </body>
 </html>
