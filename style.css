@@ -1,0 +1,193 @@
+body {
+  font-family: sans-serif;
+}
+
+#header {
+  text-align: center;
+  font-size: 28pt;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+article, form, #share, #contact {
+  max-width: 500pt;
+  margin: 0 auto 0;
+  padding: 10pt;
+  background-color: #f0f0f0;
+}
+
+#salutation {
+  font-size: 16pt;
+  font-weight: normal;
+  margin: 5pt 0 0;
+}
+
+/* for medium devices */
+#names ul {
+  list-style-type: none;
+  padding: 0;
+  
+  -moz-column-count: 2;
+  -moz-column-gap: 15pt;
+  -webkit-column-count: 2;
+  -webkit-column-gap: 15pt;
+  -ms-column-count: 2;
+  -ms-column-gap: 15pt;
+  column-count: 2;
+  column-gap: 15pt;
+}
+
+/* for small devices */
+@media (max-width: 325pt) {
+  #names ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 15pt;
+    -webkit-column-count: 1;
+    -webkit-column-gap: 15pt;
+    -ms-column-count: 1;
+    -ms-column-gap: 15pt;
+    column-count: 1;
+    column-gap: 15pt;
+  }
+}
+
+/* for large devices */
+@media (min-width: 475pt) {
+  #names ul {
+    -moz-column-count: 3;
+    -moz-column-gap: 15pt;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 15pt;
+    -ms-column-count: 3;
+    -ms-column-gap: 15pt;
+    column-count: 3;
+    column-gap: 15pt;
+  }
+}
+
+.state {
+  float: right;
+}
+
+#names ul li {
+  margin: 3pt;
+  /*for IE9 support*/
+  list-style-type: none;
+}
+
+.field {
+  margin: 10pt;
+}
+
+button, select {
+  font-size: 12pt;
+}
+
+#names {
+    margin-bottom: 5pt;
+    padding-bottom: 5pt;
+    max-height: 250pt;
+    overflow: hidden;
+    position: relative;
+}
+
+#show_more {
+  font-size: 14pt;
+  text-align: center;
+  display: inline-block;
+  vertical-align: bottom;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 0 5pt 0;
+  left: 0;
+  top: 0;
+  background: linear-gradient(transparent 200pt, rgba(256,256,256,0.75) 225pt, white 250pt);
+}
+
+#show_more a {
+  display: block;
+  margin-top: 225pt;
+  font-weight: bold;
+}
+
+.icon {
+  font-family: icons;
+  font-size: 28pt;
+  margin: 5pt;
+}
+
+.icon.small {
+  font-size: 14pt;
+}
+
+.share a, .icon a {
+  text-decoration: none;
+  color: black;
+}
+
+a {
+  color: black;
+}
+
+.sharebyemail {
+  text-decoration: underline;
+}
+
+ul.icon {
+  list-style-type: none;
+  padding-left: 0;
+  display: block;
+  text-align: center;
+}
+
+ul.icon li {
+  display: inline-block;
+  margin: 5pt;
+  /* for IE9 */
+  list-style-type: none;
+}
+
+#facebook {
+  color: #3b5998;
+}
+
+#twitter {
+  color: #00aced;
+}
+
+#googleplus {
+  color: #dd4b39;
+}
+
+#linkedin {
+  color: #007bb6;
+}
+
+.icon li a:hover, .shaddow:hover {
+  text-shadow: 2px 2px 15px #AAAAAA;
+}
+
+.share {
+  text-align: center;
+  font-size: 16pt;
+}
+
+#contact {
+  text-align: center;
+}
+
+/* fontello */
+
+@font-face {
+  font-family: 'icons';
+  src: url('./font/icons.eot?3771457');
+  src: url('./font/icons.eot?3771457#iefix') format('embedded-opentype'),
+       url('./font/icons.woff?3771457') format('woff'),
+       url('./font/icons.ttf?3771457') format('truetype'),
+       url('./font/icons.svg?3771457#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
