@@ -9,7 +9,7 @@ var signers = db.get('signers');
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
-app.use('/static', express.static('public'));
+app.use('/static', express.static(__dirname + '/public'));
 app.use(require('morgan')('combined'));
 
 //data parsing
