@@ -89,6 +89,10 @@ button, select, input {
   font-size: 12pt;
 }
 
+#private-signers {
+  text-align: center;
+}
+
 #flash_message {
   display: none;
   text-align: center;

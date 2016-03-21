@@ -42,6 +42,7 @@
         <li><span class="name">{{name}}</span><span class="state">{{state}}</span></li>
       {{/each}}
       </ul>
+      <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
       <div id="show_more"><a href="javascript:void(expandNames());">Show more</a></div>
     </article>
     
@@ -170,6 +171,8 @@
           //limit the height so there will be something to cut off
           names.style.height = "400px";
         }
+        
+        if(e('privateCount').innerText*1 < 1) e('private-signers').style.display = 'none';
       });
       
       function expandNames(){
@@ -184,7 +187,8 @@
           name: f.name.value,
           state: f.state.value,
           publicly: f.publicly.checked,
-          email: f.email.value
+          email: f.email.value,
+          referer: document.referrer
         }
         
         //validate name
@@ -230,17 +234,38 @@
       
       function handleResponse(data){
         data = JSON.parse(data);
-        formFlash('Thank you! Your name has been successfully added' + (data.publicly ? '' : ' but will remain private') + '. Now share with your friends!');
+        formFlash('Thank you! Your name has been successfully added' + (data.publicly ? '' : ' but will not be shown publicly') + '. Now share with your friends!');
+        
+        var fade = null;
         if(data.publicly){
-          e('name_list').innerHTML += '<li class="fade"><span class="name">' + data.name + '</span><span class="state">' + data.state + '</span></li>';
-          
-          //remove the fade class after 2 seconds
-          //get the last element
-          var li = e('name_list').lastChild;
-          setTimeout(function(){
-              li.className = '';
-            }, 2000);
+          var c = document.createElement.bind(document);
+          var li = c('li'), name = c('span'), state = c('span');
+          name.textContent = data.name;
+          state.textContent = data.state;
+          li.className = 'fade';
+          name.className = 'name';
+          state.className = 'state';
+          li.appendChild(name);
+          li.appendChild(state);
+          e('name_list').insertBefore(li, e('name_list').firstChild);
+          //names.innerHTML = '<li class="fade"><span class="name">' + data.name + '</span><span class="state">' + data.state + '</span></li>';
+          fade = li;
         }
+        //not public
+        else {
+          var count = e('privateCount');
+          count.innerText = count.innerText*1+1;
+          var privateSigners = e('private-signers')
+          privateSigners.style.display = 'block';
+          var privateText = e('privateText');
+          privateText.className = 'fade'
+          fade = privateText;
+        }
+        
+        //remove the fade class after 2 seconds
+        setTimeout(function(){
+            fade.className = '';
+          }, 2000);
       }
       
       //flash message under form

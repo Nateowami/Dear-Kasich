@@ -18,10 +18,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //data
 var cache = [];
+var privateCount = 0;
 
-signers.find({}, {sort: {date: 1}}, function (e, signers) {
+//public signers
+signers.find({publicly: true}, {sort: {date: -1}}, function (e, signers) {
   if(e) console.log(e);
   cache = signers || [];
+});
+
+//private signers
+signers.find({publicly: false}, {}, function (e, signers){
+  if(e) console.log(e);
+  else privateCount = signers.length;
 });
 
 //logging
@@ -30,7 +38,7 @@ app.use(function(req, res, next){
 });
 
 app.get('/', function (req, res) {
-  res.render('index', {signatures: cache});
+  res.render('index', {signatures: cache, privateCount: privateCount});
 });
 
 app.post('/sign', function(req, res){
@@ -40,19 +48,30 @@ app.post('/sign', function(req, res){
     state: b.state,
     publicly: b.publicly,
     email: b.email,
-    meta: b.meta, //meta-data, for helping make sure users are unique, we log IP, useragent, etc., not unlike most analytics solutions
-    date: new Date()
+    meta: {
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+      referer: req.body.referer //as specified in the body by client-js
+    }
   }
   
-  cache.push(data);
-  
-  signers.insert(data, function(error){
-    console.log(error);
-    res.send(JSON.stringify({
-      name: data.name,
-      state: data.state,
-      publicly: data.publicly
-    }));
+  signers.insert(data, function(error, doc){
+    if(error){
+      console.log(error)
+    }
+    else {
+      console.log(doc);
+      
+      //cache signer, as a count if private, or name/state if public
+      if(doc.publicly) cache.unshift(doc);
+      else privateCount++;
+      
+      res.send(JSON.stringify({
+        name: data.name,
+        state: data.state,
+        publicly: data.publicly
+      }));
+    }
   });
   
 });
