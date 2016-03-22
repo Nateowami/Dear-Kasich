@@ -33,13 +33,13 @@ signers.find({publicly: false}, {}, function (e, signers){
   else privateCount = signers.length;
 });
 
-//logging
-app.use(function(req, res, next){
-  next();
-});
-
 app.get('/', function (req, res) {
-  res.render('index', {signatures: cache, privateCount: privateCount});
+  res.render('index', {
+    signatures: cache,
+    privateCount: privateCount,
+    //only serve google analytics in production
+    analytics: app.get('env') == 'production'
+  });
 });
 
 app.post('/sign', function(req, res){
