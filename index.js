@@ -6,6 +6,7 @@ var db = require('monk')('localhost/dearkasich');
 var signers = db.get('signers');
 
 //settings
+app.enable('trust proxy');
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
