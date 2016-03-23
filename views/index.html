@@ -216,14 +216,17 @@
         req.onload = function() {
           if (req.status >= 200 && req.status < 400) {
             handleResponse(req.responseText);
+            logForm("success");
           } else {
             // We reached our target server, but it returned an error
             formFlash('A ' + req.status + ' server error occured.');
+            logForm("error " + req.status);
           }
         };
         
         req.onerror = function() {
           formFlash("There was an error submitting the form.");
+          logForm("network error");
         };
 
         req.send(JSON.stringify(data));
@@ -273,6 +276,13 @@
         var flash  = e('flash_message'); 
         flash.innerHTML = '<span class="fade">' + msg + '</span>';
         flash.style.display = "block"; //unhide if it was hidden
+      }
+      
+      //called when the form is submitted successfully or with errors
+      function logForm(status){
+        //do nothing if no analytics
+        if(!ga) return;
+        ga('send', 'event', 'Form submission', status);
       }
     </script>
     
