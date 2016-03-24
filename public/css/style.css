@@ -1,10 +1,19 @@
 body {
   font-family: sans-serif;
+  padding: 5pt;
 }
 
 #header {
   text-align: center;
   font-size: 28pt;
+}
+
+h1 {
+  font-size: 24pt;
+}
+
+h2 {
+  font-size: 18pt;
 }
 
 h1, h2 {
@@ -18,14 +27,18 @@ article, form, #share, #contact {
   /*background-color: #f0f0f0;*/
   border: 1px solid #f0f0f0;
   -webkit-box-shadow: 0px 0px 5px 2px rgba(50, 50, 50, 0.25);
--moz-box-shadow:    0px 0px 5px 2px rgba(50, 50, 50, 0.25);
-box-shadow:         0px 0px 5px 2px rgba(50, 50, 50, 0.25);
+  -moz-box-shadow:    0px 0px 5px 2px rgba(50, 50, 50, 0.25);
+  box-shadow:         0px 0px 5px 2px rgba(50, 50, 50, 0.25);
 }
 
 #salutation {
   font-size: 16pt;
   font-weight: normal;
   margin: 5pt 0 0;
+}
+
+#letter p {
+  font-size: 12pt;
 }
 
 /* for medium devices */
@@ -81,46 +94,37 @@ box-shadow:         0px 0px 5px 2px rgba(50, 50, 50, 0.25);
   list-style-type: none;
 }
 
-.field {
+.input-field {
   margin: 10pt;
+}
+
+.input-field label:not(.active) {
+  color: #333;
+}
+
+ul.dropdown-content li.disabled>span {
+  color: #555;
+}
+
+.row {
+  margin-bottom: 0;
 }
 
 button, select, input {
   font-size: 12pt;
 }
 
+#submit-button {
+  margin-bottom: 10pt;
+}
+
 #private-signers {
   text-align: center;
 }
 
-#flash_message {
+#flash-message {
   display: none;
-  text-align: center;
   font-size: 14pt;
-}
-
-.error {
--webkit-box-shadow: 0px 0px 5px #d45252;
--moz-box-shadow:    0px 0px 4px rgba(255, 0, 0, 0.75);
-box-shadow:         0px 0px 4px 1px rgba(255, 0, 0, 0.75);
-  border: 1px solid #b03535;
-}
-
-/* CSS animation from http://stackoverflow.com/q/12814612 */
-
-@-webkit-keyframes yellow-fade {   
-   0% {background: yellow;}
-   100% {background: none;}
-}
-
-@keyframes yellow-fade {
-   0% {background: yellow;}
-   100% {background: none;}
-}
-
-.fade {
-   -webkit-animation: yellow-fade 2s ease-in 1;
-   animation: yellow-fade 2s ease-in 1;
 }
 
 #names {
@@ -134,7 +138,6 @@ box-shadow:         0px 0px 4px 1px rgba(255, 0, 0, 0.75);
 }
 
 #show_more {
-  font-size: 14pt;
   text-align: center;
   /* JS will change it to inline-block if it needs to be shown */
   display: none;
@@ -149,13 +152,18 @@ box-shadow:         0px 0px 4px 1px rgba(255, 0, 0, 0.75);
 }
 
 #show_more a {
-  display: block;
+  display: inline-block;
   margin-top: 350px;
-  font-weight: bold;
+  background-color: #85144b;
+}
+
+#show_more a:hover {
+  background-color: #96225A;
 }
 
 .icon {
   font-family: icons;
+  text-transform: none;
   font-size: 28pt;
   margin: 5pt;
 }
@@ -166,15 +174,18 @@ box-shadow:         0px 0px 4px 1px rgba(255, 0, 0, 0.75);
 
 .share a, .icon a {
   text-decoration: none;
-  color: black;
+}
+
+.share-by-email {
+  background-color: #FF851B;
+}
+
+.share-by-email:hover {
+  background-color: #FF9030;
 }
 
 a {
   color: black;
-}
-
-.sharebyemail {
-  text-decoration: underline;
 }
 
 ul.icon {
@@ -213,6 +224,9 @@ ul.icon li {
 
 .share {
   text-align: center;
+}
+
+.share_alternate {
   font-size: 16pt;
 }
 

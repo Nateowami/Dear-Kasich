@@ -4,6 +4,7 @@
     <title>An Open Letter to Governor Kasich</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/static/materialize/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   </head>
   
@@ -43,16 +44,19 @@
       {{/each}}
       </ul>
       <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
-      <div id="show_more"><a href="javascript:void(expandNames());">Show more</a></div>
+      <div id="show_more"><a href="javascript:void(expandNames());" class="waves-effect waves-light btn">Show more</a></div>
     </article>
     
     <h2>Sign the open letter</h2>
-    <form id="sign" onsubmit="return postForm()" method="POST">
-      <div class="field">
-      <label>Name (first & last) <input id="name" name="name" type="text"></label>
-      </div>
-      <div class="field">
-      <label>State or territory <select name="state">
+    <form id="sign" onsubmit="postForm()">
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input id="name" type="text" name="name" class="validate">
+          <label for="name">First and last name (required)</label>
+        </div>
+        <div class="input-field col s12 m5">
+          <select name="state" id="state">
+            <option value="" disabled selected>State or territory (required)</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
             <option value="AZ">Arizona</option>
@@ -110,18 +114,26 @@
             <option value="GU">Guam</option>
             <option value="MP">Northern Mariana Islands</option>
           </select>
-        </label>
+        </div>
       </div>
-      <div class="field">
-        <label><input type="checkbox" id="publicly" name="publicly" checked>Show my name publically</label>
+      <div class="row">
+        <div class="input-field col s12 m5">
+          <input type="checkbox" class="filled-in" id="publicly" checked="checked">
+          <label for="publicly">Show my name publicly</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <input type="email" id="email" class="validate">
+          <label for="email">Email address for updates (optional)</label>
+        </div>
       </div>
-      <div class="field">
-        <label>Email address for updates (optional) <input type="text" id="email" name="email"></label>
+      <div class="row">
+        <div class="col s12 m5" id="submit-button">
+          <a class="waves-effect waves-light btn" href="javascript:postForm()">Sign the letter!</a>
+        </div>
+        <div class="col s12 m6">
+          <div id="flash-message"></div>
+        </div>
       </div>
-      <div class="field">
-        <button type="submit">Sign the letter!</button>
-      </div>
-      <div id="flash_message"></div>
     </form>
     
     <h2>Pass it on</h2>
@@ -129,11 +141,11 @@
       <p>The only way this letter can or will be spread is by concerned Americans who want capable leaders. There will be no advertising campaign—we're relying on you.
       </p>
       <p class="share">
-        <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" class="shaddow"><span class="icon">m</span><span class="sharebyemail">Share by email</span></a>
+        <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
       </p>
       
       <p class="share">
-        ...or share via social media
+        <span class="share_alternate">...or share via social media
         <ul class="icon">
           <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//dearkasich.com" id="facebook">f</a></li>
           <li><a href="https://twitter.com/home?status=https%3A//dearkasich.com" id="twitter">t</a></li>
@@ -192,21 +204,23 @@
         }
         
         //validate name
-        if(!data.name){
-          var name = e('name')
-          name.className = 'error';
-          formFlash("Please enter a name.");
-          name.focus();
-          return false;
+        if(!data.name) $("#name").addClass("invalid").focus();
+        else $("#name").removeClass("invalid").addClass("valid");
+        if(!data.state) {
+          $("#state").addClass("invalid");
+          //don't focus state select if name needs focus
+          if(data.name) $("input.select-dropdown").focus();
         }
-        else {
-          var name = e('name');
-          //remove any error class
-          name.className = '';
-          //reset values
-          name.value = '';
-          e('email').value = '';
-        }
+        else $("#state").removeClass("invalid").addClass("valid");
+        
+        var msg = "";
+        if(!data.name && !data.state) msg = "Please enter your name and state."
+        else if(!data.name) msg = "Please enter your name.";
+        else if(!data.state) msg = "Please select your state.";
+        
+        formFlash(msg);
+        
+        if(msg) return false;
         
         //submit with AJAX - courtesy of http://youmightnotneedjquery.com/ Copyright (c) 2014 HubSpot, Inc. - MIT license
         var req = new XMLHttpRequest();
@@ -239,51 +253,47 @@
         data = JSON.parse(data);
         formFlash('Thank you! Your name has been successfully added' + (data.publicly ? '' : ' but will not be shown publicly') + '. Now share with your friends!');
         
-        var fade = null;
         if(data.publicly){
           var c = document.createElement.bind(document);
           var li = c('li'), name = c('span'), state = c('span');
           name.textContent = data.name;
           state.textContent = data.state;
-          li.className = 'fade';
+          li.style.display = "none";
           name.className = 'name';
           state.className = 'state';
           li.appendChild(name);
           li.appendChild(state);
           e('name_list').insertBefore(li, e('name_list').firstChild);
-          //names.innerHTML = '<li class="fade"><span class="name">' + data.name + '</span><span class="state">' + data.state + '</span></li>';
-          fade = li;
+          $(li).fadeIn();
         }
         //not public
         else {
-          var count = e('privateCount');
-          count.innerText = count.innerText*1+1;
-          var privateSigners = e('private-signers')
-          privateSigners.style.display = 'block';
-          var privateText = e('privateText');
-          privateText.className = 'fade'
-          fade = privateText;
+          var count = $("#privateCount").text();
+          $("#privateCount").text(count*1+1);
+          $("#private-signers").fadeIn();
         }
-        
-        //remove the fade class after 2 seconds
-        setTimeout(function(){
-            fade.className = '';
-          }, 2000);
       }
       
       //flash message under form
       function formFlash(msg){
-        var flash  = e('flash_message'); 
-        flash.innerHTML = '<span class="fade">' + msg + '</span>';
-        flash.style.display = "block"; //unhide if it was hidden
+        $('#flash-message').text(msg).fadeIn();
       }
       
       //called when the form is submitted successfully or with errors
       function logForm(status){
         //do nothing if no analytics
-        if(!ga) return;
+        if(typeof ga == "undefined") return;
         ga('send', 'event', 'Form submission', status);
       }
+    </script>
+    
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js.js"></script>
+    <script src="/static/materialize/js/materialize.min.js"></script>
+    
+    <script>
+      $(document).ready(function() {
+        $('select').material_select();
+      });
     </script>
     
     {{#if analytics}}
