@@ -44,7 +44,7 @@
       {{/each}}
       </ul>
       <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
-      <div id="show_more"><a href="javascript:void(expandNames());" class="waves-effect waves-light btn">Show more</a></div>
+      <div id="show_more"><a onclick="expandNames()" class="waves-effect waves-light btn">Show more</a></div>
     </article>
     
     <h2>Sign the open letter</h2>
@@ -141,16 +141,16 @@
       <p>The only way this letter can or will be spread is by concerned Americans who want capable leaders. There will be no advertising campaign—we're relying on you.
       </p>
       <p class="share">
-        <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
+        <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" onclick="share('email')" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
       </p>
       
       <p class="share">
         <span class="share_alternate">...or share via social media
         <ul class="icon">
-          <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//dearkasich.com" id="facebook">f</a></li>
-          <li><a href="https://twitter.com/home?status=https%3A//dearkasich.com" id="twitter">t</a></li>
-          <li><a href="https://plus.google.com/share?url=https%3A//dearkasich.com" id="googleplus">g</a></li>
-          <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//dearkasich.com&title=An%20open%20letter%20to%20Governor%20Kasich&summary=&source=" id="linkedin">l</a></li>
+          <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//dearkasich.com" onclick="share('facebook')" target="_blank" id="facebook">f</a></li>
+          <li><a href="https://twitter.com/home?status=https%3A//dearkasich.com" onclick="share('twitter')" target="_blank" id="twitter">t</a></li>
+          <li><a href="https://plus.google.com/share?url=https%3A//dearkasich.com" onclick="share('googleplus')" target="_blank" id="googleplus">g</a></li>
+          <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//dearkasich.com&title=An%20open%20letter%20to%20Governor%20Kasich&summary=&source=" onclick="share('linkedin')" target="_blank" id="linkedin">l</a></li>
         </ul>
       </p>
     </div>
@@ -191,6 +191,7 @@
         e('names').style.maxHeight = 'none';
         e('names').style.height = 'auto';
         e('show_more').style.display = 'none';
+        return false;
       }
       
       function postForm(){
@@ -284,6 +285,12 @@
         //do nothing if no analytics
         if(typeof ga == "undefined") return;
         ga('send', 'event', 'Form submission', status);
+      }
+      
+      //called when sharing buttons are used
+      function share(str){
+        if(typeof ga == "undefined") return;
+        ga('send', 'event', 'Share', status);
       }
     </script>
     
