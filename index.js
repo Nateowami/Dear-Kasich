@@ -77,5 +77,17 @@ app.post('/sign', function(req, res){
   
 });
 
+//for 404s
+app.use(function(req, res){
+  res.status(404).render('error', {code: 404, msg: "Page not found"});
+  console.log("404 response for " + req.url);
+});
+
+//for 500s
+app.use(function(err, req, res, next){
+  console.error(err.stack);
+  res.status(500).render("error", {code: 500, msg: "Internal server error", stack: app.get('env') == "production" ? null : err.stack});
+});
+
 console.log("Listening on port %s...", 
   app.listen(process.env.PORT || 3000).address().port);

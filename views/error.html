@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Error {{code}}</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+  </head>
+  <body>
+    <article style="text-align: center;">
+      <h1>Error {{code}}</h1>
+      <div>{{msg}}</div>
+      <br>
+      <a href="/">Go Home</a>
+    </article>
+    {{#if stack}}
+        <code style="text-align: left;">{{stack}}</code>
+    {{/if}}
+  </body>
+</html>
