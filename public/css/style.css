@@ -114,7 +114,7 @@ button, select, input {
   font-size: 12pt;
 }
 
-#submit-button {
+#submit-container {
   margin-bottom: 10pt;
 }
 
@@ -172,6 +172,10 @@ button, select, input {
   font-size: 14pt;
 }
 
+ul.icon {
+  margin: 0;
+}
+
 .share a, .icon a {
   text-decoration: none;
 }
@@ -226,7 +230,7 @@ ul.icon li {
   text-align: center;
 }
 
-.share_alternate {
+.share-text {
   font-size: 16pt;
 }
 

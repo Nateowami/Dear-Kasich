@@ -127,8 +127,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col s12 m5" id="submit-button">
-          <a class="waves-effect waves-light btn" href="javascript:postForm()">Sign the letter!</a>
+        <div class="col s12 m5" id="submit-container">
+          <a class="waves-effect waves-light btn" href="javascript:postForm()" id="submit">Sign the letter!</a>
         </div>
         <div class="col s12 m6">
           <div id="flash-message"></div>
@@ -144,15 +144,15 @@
         <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" onclick="share('email')" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
       </p>
       
-      <p class="share">
-        <span class="share_alternate">...or share via social media
+      <div class="share">
+        <span class="share-text">...or share via social media</span>
         <ul class="icon">
           <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//dearkasich.com" onclick="share('facebook')" target="_blank" id="facebook">f</a></li>
           <li><a href="https://twitter.com/home?status=https%3A//dearkasich.com" onclick="share('twitter')" target="_blank" id="twitter">t</a></li>
           <li><a href="https://plus.google.com/share?url=https%3A//dearkasich.com" onclick="share('googleplus')" target="_blank" id="googleplus">g</a></li>
           <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//dearkasich.com&title=An%20open%20letter%20to%20Governor%20Kasich&summary=&source=" onclick="share('linkedin')" target="_blank" id="linkedin">l</a></li>
         </ul>
-      </p>
+      </div>
     </div>
     
     <h2>Contact</h2>
@@ -169,6 +169,29 @@
       <p>
         <span class="icon small">h</span><a href="https://github.com/Nateowami/Dear-Kasich">Project on GitHub</a>
       </p>
+    </div>
+    
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h4>Thanks for signing!</h4>
+        <p class="share-text share">Now will you pass it on? There will be no advertising campaign—we're relying on you.</p>
+      <p class="share">
+        <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" onclick="share('email')" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
+      </p>
+      
+      <div class="share">
+        <span class="share-text">...or share via social media</span>
+        <ul class="icon">
+          <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//dearkasich.com" onclick="share('facebook')" target="_blank" id="facebook">f</a></li>
+          <li><a href="https://twitter.com/home?status=https%3A//dearkasich.com" onclick="share('twitter')" target="_blank" id="twitter">t</a></li>
+          <li><a href="https://plus.google.com/share?url=https%3A//dearkasich.com" onclick="share('googleplus')" target="_blank" id="googleplus">g</a></li>
+          <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//dearkasich.com&title=An%20open%20letter%20to%20Governor%20Kasich&summary=&source=" onclick="share('linkedin')" target="_blank" id="linkedin">l</a></li>
+        </ul>
+      </div>
+      </div>
+      <div class="modal-footer">
+              <a class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
     </div>
     
     <script type="text/javascript">
@@ -195,6 +218,9 @@
       }
       
       function postForm(){
+        // do nothing if it's disabled
+        if($('#submit').hasClass('disabled')) return;
+        
         var f = e('sign');
         var data = {
           name: f.name.value,
@@ -223,12 +249,16 @@
         
         if(msg) return false;
         
+        //data validated, so disable button to avoid double clicking
+        $('#submit').addClass('disabled');
+        
         //submit with AJAX - courtesy of http://youmightnotneedjquery.com/ Copyright (c) 2014 HubSpot, Inc. - MIT license
         var req = new XMLHttpRequest();
         req.open('POST', '/sign', true);
         req.setRequestHeader('Content-Type', 'application/json');
         
         req.onload = function() {
+          $("#submit").removeClass("disabled");
           if (req.status >= 200 && req.status < 400) {
             handleResponse(req.responseText);
             logForm("success");
@@ -242,6 +272,7 @@
         req.onerror = function() {
           formFlash("There was an error submitting the form.");
           logForm("network error");
+          $("#submit").removeClass("disabled");
         };
 
         req.send(JSON.stringify(data));
@@ -252,7 +283,8 @@
       
       function handleResponse(data){
         data = JSON.parse(data);
-        formFlash('Thank you! Your name has been successfully added' + (data.publicly ? '' : ' but will not be shown publicly') + '. Now share with your friends!');
+        $("#modal").openModal();
+        $("#name").val("");
         
         if(data.publicly){
           var c = document.createElement.bind(document);
