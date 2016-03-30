@@ -14,9 +14,11 @@ cons.requires.handlebars.registerHelper('nameToFirstAndInitial', function nameTo
   var finalName = name;
 
   if(splitName.length >= 2) {
-    splitName[splitName.length - 1] = splitName[splitName.length - 1][0]
+    if(splitName[splitName.length - 1] && splitName[splitName.length - 1][0]) {
+      splitName[splitName.length - 1] = splitName[splitName.length - 1][0]
       .toUpperCase();
-    finalName = splitName.join(' ');
+      finalName = splitName.join(' ');
+    }
   }
 
   return finalName;
