@@ -10,6 +10,7 @@ var signers = db.get('signers');
 cons.requires.handlebars = handlebars;
 // Converts the last section of a name with at least two parts to an initial, for privacy's sake.
 cons.requires.handlebars.registerHelper('nameToFirstAndInitial', function nameToFirstAndInitial(name) {
+  name = name.trim();
   var splitName = name.split(' ');
   var finalName = name;
 
