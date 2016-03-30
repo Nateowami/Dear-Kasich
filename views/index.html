@@ -36,17 +36,6 @@
         </p>
     </article>
     
-    <h2>Signers</h2>
-    <article id="names">
-      <ul id="name_list">
-      {{#each signatures}}
-        <li><span class="name">{{name}}</span><span class="state">{{state}}</span></li>
-      {{/each}}
-      </ul>
-      <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
-      <div id="show_more"><a href="javascript:void(0)" onclick="expandNames()" class="waves-effect waves-light btn">Show more</a></div>
-    </article>
-    
     <h2>Sign the open letter</h2>
     <form id="sign" onsubmit="postForm()">
       <div class="row">
@@ -135,6 +124,17 @@
         </div>
       </div>
     </form>
+    
+    <h2>Signers</h2>
+    <article id="names">
+      <ul id="name_list">
+      {{#each signatures}}
+        <li><span class="name">{{name}}</span><span class="state">{{state}}</span></li>
+      {{/each}}
+      </ul>
+      <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
+      <div id="show_more"><a href="javascript:void(0)" onclick="expandNames()" class="waves-effect waves-light btn">Show more</a></div>
+    </article>    
     
     <h2>Pass it on</h2>
     <div id="share">
