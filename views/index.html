@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="/static/materialize/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   </head>
-  
+
   <body>
     <h1>An Open Letter to Governor Kasich</h1>
-    
+
     <article id="letter">
       <h3 id="salutation">Dear Governor Kasich,</h3>
       <p>
@@ -35,7 +35,7 @@
           We, the undersigned
         </p>
     </article>
-    
+
     <h2>Sign the open letter</h2>
     <form id="sign" onsubmit="postForm()">
       <div class="row">
@@ -124,18 +124,18 @@
         </div>
       </div>
     </form>
-    
+
     <h2>Signers</h2>
     <article id="names">
       <ul id="name_list">
       {{#each signatures}}
-        <li><span class="name">{{name}}</span><span class="state">{{state}}</span></li>
+        <li><span class="name">{{nameToFirstAndInitial name}}</span><span class="state">{{state}}</span></li>
       {{/each}}
       </ul>
       <div id="private-signers"><span id="privateText">...and <span id="privateCount">{{privateCount}}</span> more who signed privately.</span></div>
       <div id="show_more"><a href="javascript:void(0)" onclick="expandNames()" class="waves-effect waves-light btn">Show more</a></div>
-    </article>    
-    
+    </article>
+
     <h2>Pass it on</h2>
     <div id="share">
       <p>The only way this letter can or will be spread is by concerned Americans who want capable leaders. There will be no advertising campaign—we're relying on you.
@@ -143,7 +143,7 @@
       <p class="share">
         <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" onclick="share('email')" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
       </p>
-      
+
       <div class="share">
         <span class="share-text">...or share via social media</span>
         <ul class="icon">
@@ -154,7 +154,7 @@
         </ul>
       </div>
     </div>
-    
+
     <h2>FAQ</h2>
     <div id="faq">
       <dl>
@@ -162,7 +162,7 @@
         <dd>It's just a letter, so there are no hard and fast rules.</dd>
       <dl>
     </div>
-    
+
     <h2>Contact</h2>
     <div id="contact">
       <p>
@@ -178,7 +178,7 @@
         <span class="icon small">h</span><a href="https://github.com/Nateowami/Dear-Kasich">Project on GitHub</a>
       </p>
     </div>
-    
+
     <div id="modal" class="modal">
       <div class="modal-content">
         <h4>Thanks for signing!</h4>
@@ -186,7 +186,7 @@
       <p class="share">
         <a href="mailto:?&subject=An open letter to Governor Kasich&body=An%20open%20letter%20to%20Governor%20Kasich%0A%0Ahttps%3A//dearkasich.com" onclick="share('email')" class="waves-effect waves-light btn share-by-email"><span class="icon small">m</span>Share by email</a>
       </p>
-      
+
       <div class="share">
         <span class="share-text">...or share via social media</span>
         <ul class="icon">
@@ -201,11 +201,11 @@
               <a class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
       </div>
     </div>
-    
+
     <script type="text/javascript">
       //alias
       var e = document.getElementById.bind(document);
-      
+
       //script for managing the show more button
       document.addEventListener('DOMContentLoaded', function(){
         var names = e("names");
@@ -214,21 +214,21 @@
           //limit the height so there will be something to cut off
           names.style.height = "400px";
         }
-        
+
         if(e('privateCount').innerText*1 < 1) e('private-signers').style.display = 'none';
       });
-      
+
       function expandNames(){
         e('names').style.maxHeight = 'none';
         e('names').style.height = 'auto';
         e('show_more').style.display = 'none';
         return false;
       }
-      
+
       function postForm(){
         // do nothing if it's disabled
         if($('#submit').hasClass('disabled')) return;
-        
+
         var f = e('sign');
         var data = {
           name: f.name.value,
@@ -237,7 +237,7 @@
           email: f.email.value,
           referer: document.referrer
         }
-        
+
         //validate name
         if(!data.name) $("#name").addClass("invalid").focus();
         else $("#name").removeClass("invalid").addClass("valid");
@@ -247,24 +247,24 @@
           if(data.name) $("input.select-dropdown").focus();
         }
         else $("#state").removeClass("invalid").addClass("valid");
-        
+
         var msg = "";
         if(!data.name && !data.state) msg = "Please enter your name and state."
         else if(!data.name) msg = "Please enter your name.";
         else if(!data.state) msg = "Please select your state.";
-        
+
         formFlash(msg);
-        
+
         if(msg) return false;
-        
+
         //data validated, so disable button to avoid double clicking
         $('#submit').addClass('disabled');
-        
+
         //submit with AJAX - courtesy of http://youmightnotneedjquery.com/ Copyright (c) 2014 HubSpot, Inc. - MIT license
         var req = new XMLHttpRequest();
         req.open('POST', '/sign', true);
         req.setRequestHeader('Content-Type', 'application/json');
-        
+
         req.onload = function() {
           $("#submit").removeClass("disabled");
           if (req.status >= 200 && req.status < 400) {
@@ -276,7 +276,7 @@
             logForm("error " + req.status);
           }
         };
-        
+
         req.onerror = function() {
           formFlash("There was an error submitting the form.");
           logForm("network error");
@@ -284,20 +284,33 @@
         };
 
         req.send(JSON.stringify(data));
-        
+
         //don't submit the normal way
         return false;
       }
-      
+
       function handleResponse(data){
         data = JSON.parse(data);
         $("#modal").openModal();
         $("#name").val("");
-        
-        if(data.publicly){
+
+        if(data.publicly) {
           var c = document.createElement.bind(document);
           var li = c('li'), name = c('span'), state = c('span');
-          name.textContent = data.name;
+
+          // Converts the last section of a name with at least two parts to an initial, for privacy's sake.
+          var splitName = data.name.split(' ');
+          var finalName = data.name;
+
+          if(splitName.length >= 2) {
+            if(splitName[splitName.length - 1] && splitName[splitName.length - 1][0]) {
+              splitName[splitName.length - 1] = splitName[splitName.length - 1][0]
+              .toUpperCase();
+              finalName = splitName.join(' ');
+            }
+          }
+
+          name.textContent = finalName;
           state.textContent = data.state;
           li.style.display = "none";
           name.className = 'name';
@@ -314,29 +327,29 @@
           $("#private-signers").fadeIn();
         }
       }
-      
+
       //flash message under form
       function formFlash(msg){
         $('#flash-message').text(msg).fadeIn();
       }
-      
+
       //called when the form is submitted successfully or with errors
       function logForm(status){
         //do nothing if no analytics
         if(typeof ga == "undefined") return;
         ga('send', 'event', 'Form submission', status);
       }
-      
+
       //called when sharing buttons are used
       function share(str){
         if(typeof ga == "undefined") return;
         ga('send', 'event', 'Share', status);
       }
     </script>
-    
+
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js.js"></script>
     <script src="/static/materialize/js/materialize.min.js"></script>
-    
+
     <script>
       $(document).ready(function() {
         //check for < IE9
@@ -351,7 +364,7 @@
         $('select').material_select();
       });
     </script>
-    
+
     {{#if analytics}}
     <script>
       //GA tracking code
@@ -359,12 +372,12 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    
+
       ga('create', 'UA-75379345-1', 'auto');
       ga('send', 'pageview');
 
     </script>
     {{/if}}
-    
+
   </body>
 </html>
