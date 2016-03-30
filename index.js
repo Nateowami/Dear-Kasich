@@ -22,7 +22,7 @@ var cache = [];
 var privateCount = 0;
 
 //public signers
-signers.find({publicly: true}, {sort: {date: -1}}, function (e, signers) {
+signers.find({publicly: true}, {sort: {'_id': -1}}, function (e, signers) {
   if(e) console.log(e);
   cache = signers || [];
 });
