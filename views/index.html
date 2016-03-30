@@ -339,6 +339,15 @@
     
     <script>
       $(document).ready(function() {
+        //check for < IE9
+        var v = navigator.appVersion;
+        if(v.indexOf("MSIE 6.")  != -1
+            || v.indexOf("MSIE 7.") != -1
+            || v.indexOf("MSIE 8.") != -1
+            || v.indexOf("MSIE 9.") != -1 ){
+          //default to older select menu
+          $("#state").addClass("browser-default");
+        }
         $('select').material_select();
       });
     </script>
