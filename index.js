@@ -15,7 +15,7 @@ cons.requires.handlebars.registerHelper('nameToFirstAndInitial', function nameTo
 
   if(splitName.length >= 2) {
     splitName[splitName.length - 1] = splitName[splitName.length - 1][0]
-      .toUpperCase() + '.';
+      .toUpperCase();
     finalName = splitName.join(' ');
   }
 
