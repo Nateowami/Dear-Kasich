@@ -9,5 +9,4 @@ Built with Node.js, Express, Mongo, Materialize, and jQuery.
 * Tidy layout of the modal dialog shown after successful signing
 * Make sure it's solid. Need to work on QA.
 * Code needs cleanup. Goes right along with QA.
-* Consider reversing order of signing block and singers block.
-
+* Consider reversing order of signing block and signers block.
