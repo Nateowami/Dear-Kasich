@@ -62,41 +62,6 @@ app.get('/', function (req, res) {
   });
 });
 
-app.post('/sign', function(req, res){
-  var b = req.body;
-  var data = {
-    name: req.body.name,
-    state: b.state,
-    publicly: b.publicly,
-    email: b.email,
-    meta: {
-      ip: req.ip,
-      userAgent: req.get('User-Agent'),
-      referer: req.body.referer //as specified in the body by client-js
-    }
-  }
-
-  signers.insert(data, function(error, doc){
-    if(error){
-      console.log(error)
-    }
-    else {
-      console.log(doc);
-
-      //cache signer, as a count if private, or name/state if public
-      if(doc.publicly) cache.unshift(doc);
-      else privateCount++;
-
-      res.send(JSON.stringify({
-        name: data.name,
-        state: data.state,
-        publicly: data.publicly
-      }));
-    }
-  });
-
-});
-
 //for 404s
 app.use(function(req, res){
   res.status(404).render('error', {code: 404, msg: 'Page not found'});
